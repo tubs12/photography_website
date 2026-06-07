@@ -14,7 +14,7 @@
 {{ if $photos }}
 <div class="photo-grid">
   {{ range $photos }}
-  {{ $img := .Resize "1400x" }}
+  {{ $img := .AutoOrient.Resize "1400x" }}
   <img src="{{ $img.RelPermalink }}" alt="Photography by {{ $.Site.Params.author }}" loading="lazy">
   {{ end }}
 </div>
