@@ -286,3 +286,26 @@ a {
   border-top: 1px solid var(--border);
   margin-top: 2rem;
 }
+
+.footer-social {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.footer-social a {
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+
+.footer-social a:hover {
+  color: var(--text);
+}
+
+.footer-social svg {
+  width: 20px;
+  height: 20px;
+}
