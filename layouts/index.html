@@ -5,19 +5,18 @@
 </section>
 
 {{ $allResources := resources.Match "photos/*" }}
-{{ $photos := slice }}
-{{ range $allResources }}
-  {{ if eq .ResourceType "image" }}
-    {{ $photos = $photos | append . }}
-  {{ end }}
-{{ end }}
-{{ if $photos }}
+{{ $hasPhotos := false }}
+{{ range $allResources }}{{ if eq .ResourceType "image" }}{{ $hasPhotos = true }}{{ end }}{{ end }}
+
+{{ if $hasPhotos }}
 <div class="photo-grid">
-  {{ range $photos }}
+  {{ range $allResources }}
+  {{ if eq .ResourceType "image" }}
   {{ $img := .AutoOrient.Resize "1400x" }}
   <div class="photo-item">
     <img src="{{ $img.RelPermalink }}" alt="Photography by {{ $.Site.Params.author }}" loading="lazy">
   </div>
+  {{ end }}
   {{ end }}
 </div>
 {{ else }}
