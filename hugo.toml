@@ -1,0 +1,8 @@
+baseURL = 'https://tubs12.github.io/photography_website/'
+locale = 'en-us'
+title = 'Lucas Layton'
+
+[params]
+  author = "Lucas Layton"
+  description = "Photography portfolio and personal blog"
+  tagline = "Photography & Writing"

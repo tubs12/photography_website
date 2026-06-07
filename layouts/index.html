@@ -1,0 +1,26 @@
+{{ define "main" }}
+<section class="hero">
+  <h1 class="hero-name">{{ .Site.Params.author }}</h1>
+  <p class="hero-tagline">{{ .Site.Params.tagline }}</p>
+</section>
+
+{{ $allResources := resources.Match "photos/*" }}
+{{ $photos := slice }}
+{{ range $allResources }}
+  {{ if eq .ResourceType "image" }}
+    {{ $photos = $photos | append . }}
+  {{ end }}
+{{ end }}
+{{ if $photos }}
+<div class="photo-grid">
+  {{ range $photos }}
+  {{ $img := .Resize "1400x" }}
+  <img src="{{ $img.RelPermalink }}" alt="Photography by {{ $.Site.Params.author }}" loading="lazy">
+  {{ end }}
+</div>
+{{ else }}
+<div class="photo-grid-empty">
+  <p>Add your photos to <code>assets/photos/</code> to populate the gallery.</p>
+</div>
+{{ end }}
+{{ end }}

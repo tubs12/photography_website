@@ -1,0 +1,18 @@
+{{ define "main" }}
+<div class="page-header">
+  <h1>{{ .Title }}</h1>
+</div>
+<div class="blog-list">
+  {{ if .Pages }}
+  {{ range .Pages.ByDate.Reverse }}
+  <article class="blog-card">
+    <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+    <div class="meta">{{ .Date.Format "January 2, 2006" }}</div>
+    {{ with .Description }}<p class="summary">{{ . }}</p>{{ end }}
+  </article>
+  {{ end }}
+  {{ else }}
+  <p class="blog-empty">No posts yet.</p>
+  {{ end }}
+</div>
+{{ end }}
