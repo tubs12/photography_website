@@ -1,28 +1,9 @@
 {{ define "main" }}
-<section class="hero">
-  <h1 class="hero-name">{{ .Site.Params.author }}</h1>
-  <p class="hero-tagline">{{ .Site.Params.tagline }}</p>
+<section class="about">
+  <h1 class="about-name">{{ .Site.Params.author }}</h1>
+  <p class="about-tagline">{{ .Site.Params.tagline }}</p>
+  {{ with .Content }}
+  <div class="about-content">{{ . }}</div>
+  {{ end }}
 </section>
-
-{{ $allResources := resources.Match "photos/*" }}
-{{ $hasPhotos := false }}
-{{ range $allResources }}{{ if eq .ResourceType "image" }}{{ $hasPhotos = true }}{{ end }}{{ end }}
-
-{{ if $hasPhotos }}
-<div class="photo-grid">
-  {{ range $allResources }}
-  {{ if eq .ResourceType "image" }}
-  {{ $oriented := . | images.Filter images.AutoOrient }}
-  {{ $img := $oriented.Resize "1400x" }}
-  <div class="photo-item">
-    <img src="{{ $img.RelPermalink }}" alt="Photography by {{ $.Site.Params.author }}" loading="lazy">
-  </div>
-  {{ end }}
-  {{ end }}
-</div>
-{{ else }}
-<div class="photo-grid-empty">
-  <p>Add your photos to <code>assets/photos/</code> to populate the gallery.</p>
-</div>
-{{ end }}
 {{ end }}

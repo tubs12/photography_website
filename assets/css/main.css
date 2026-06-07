@@ -64,25 +64,41 @@ a {
   display: block;
 }
 
-/* ── Hero ── */
+/* ── About ── */
 
-.hero {
-  padding: 5rem 2rem 3rem;
-  text-align: center;
+.about {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 5rem 2rem 4rem;
 }
 
-.hero-name {
-  font-size: clamp(2.5rem, 8vw, 5rem);
+.about-name {
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
   font-weight: 300;
   letter-spacing: -0.03em;
   line-height: 1;
 }
 
-.hero-tagline {
+.about-tagline {
   color: var(--muted);
   font-size: 1.05rem;
   margin-top: 1rem;
   font-weight: 300;
+}
+
+.about-content {
+  margin-top: 2.5rem;
+  font-size: 1.1rem;
+  line-height: 1.85;
+  color: var(--text);
+}
+
+.about-content p {
+  margin-bottom: 1.25rem;
+}
+
+.about-content a {
+  text-underline-offset: 3px;
 }
 
 /* ── Photo grid ── */
