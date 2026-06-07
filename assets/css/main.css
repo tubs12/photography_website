@@ -58,6 +58,12 @@ a {
   color: var(--text);
 }
 
+.nav-links svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
 /* ── Hero ── */
 
 .hero {
@@ -89,21 +95,27 @@ a {
   margin: 0 auto;
 }
 
-.photo-grid img {
-  width: 100%;
-  display: block;
-  margin-bottom: 6px;
+.photo-item {
   break-inside: avoid;
-  cursor: zoom-in;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  margin-bottom: 6px;
   position: relative;
   z-index: 1;
 }
 
-.photo-grid img:hover {
-  transform: scale(1.15);
-  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.25);
-  z-index: 10;
+.photo-item:hover {
+  z-index: 100;
+}
+
+.photo-item img {
+  width: 100%;
+  display: block;
+  cursor: zoom-in;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.photo-item:hover img {
+  transform: scale(2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
 }
 
 .photo-grid-empty {
@@ -287,25 +299,3 @@ a {
   margin-top: 2rem;
 }
 
-.footer-social {
-  display: flex;
-  justify-content: center;
-  gap: 1.25rem;
-  margin-bottom: 0.75rem;
-}
-
-.footer-social a {
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  transition: color 0.15s;
-}
-
-.footer-social a:hover {
-  color: var(--text);
-}
-
-.footer-social svg {
-  width: 20px;
-  height: 20px;
-}
