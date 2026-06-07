@@ -94,6 +94,16 @@ a {
   display: block;
   margin-bottom: 6px;
   break-inside: avoid;
+  cursor: zoom-in;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.photo-grid img:hover {
+  transform: scale(1.04);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  z-index: 10;
 }
 
 .photo-grid-empty {
