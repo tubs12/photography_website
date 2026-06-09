@@ -79,14 +79,25 @@ a {
   border: none;
   cursor: pointer;
   color: var(--muted);
-  padding: 0;
+  padding: 0.5rem;
+  margin: -0.5rem;
   display: flex;
   align-items: center;
   transition: color 0.15s;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .theme-toggle:hover {
   color: var(--text);
+}
+
+@media (max-width: 640px) {
+  .nav {
+    padding: 0.875rem 1rem;
+  }
+  .nav-links {
+    gap: 0.875rem;
+  }
 }
 
 .nav-links .icon-sun { display: none; }
@@ -135,16 +146,31 @@ html.dark .nav-links .icon-moon { display: none; }
   line-height: 1.75;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   .hero {
-    flex-direction: column;
-    padding: 3rem 1.5rem;
-    gap: 2rem;
+    gap: 2.5rem;
+    padding: 3.5rem 2rem 3rem;
   }
-
   .hero-photo {
-    flex: none;
-    width: 100%;
+    flex: 0 0 320px;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    gap: 1.25rem;
+    padding: 2rem 1.25rem 2.5rem;
+  }
+  .hero-photo {
+    flex: 0 0 42%;
+  }
+  .about-name {
+    font-size: 1.6rem;
+  }
+  .about-tagline {
+    font-size: 0.875rem;
+    margin-top: 0.75rem;
+    line-height: 1.6;
   }
 }
 
