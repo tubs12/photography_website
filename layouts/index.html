@@ -1,9 +1,14 @@
 {{ define "main" }}
-<section class="about">
-  <h1 class="about-name">{{ .Site.Params.author }}</h1>
-  <p class="about-tagline">{{ .Site.Params.tagline }}</p>
-  {{ with .Content }}
-  <div class="about-content">{{ . }}</div>
-  {{ end }}
+{{ $raw := resources.Get "hero/IMG_3989.JPG" }}
+{{ $oriented := $raw | images.Filter images.AutoOrient }}
+{{ $img := $oriented.Resize "900x" }}
+<section class="hero">
+  <div class="hero-photo">
+    <img src="{{ $img.RelPermalink }}" alt="Lucas skydiving">
+  </div>
+  <div class="hero-text">
+    <h1 class="about-name">{{ .Site.Params.author }}</h1>
+    <p class="about-tagline">Hi. I'm Lucas. A photographer based in Dallas. I like to take pictures of the world. This is where I share my <a href="{{ "gallery/" | relURL }}">work</a> and occasionally <a href="{{ "blog/" | relURL }}">write</a> about it.</p>
+  </div>
 </section>
 {{ end }}

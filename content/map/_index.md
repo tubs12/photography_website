@@ -1,0 +1,23 @@
+---
+title: Map
+visited:
+  - US
+  - MX
+  - GT
+  - AR
+  - BR
+  - GB
+  - FR
+  - ES
+  - PT
+  - LI
+  - DE
+  - CZ
+  - CH
+  - IT
+  - BE
+  - NL
+  - KR
+  - JP
+  - TR
+---

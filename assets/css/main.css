@@ -5,6 +5,16 @@
   --border: #e8e8e8;
   --max-width: 1200px;
   --content-width: 720px;
+  --map-visited: #7ba08c;
+  --map-unvisited: #ddd8d0;
+}
+
+html.dark {
+  --bg: #1c1a18;
+  --text: #f0ede8;
+  --muted: #8a8580;
+  --border: #2e2b28;
+  --map-unvisited: #2e2b28;
 }
 
 * {
@@ -64,16 +74,54 @@ a {
   display: block;
 }
 
-/* ── About ── */
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
 
-.about {
-  max-width: var(--content-width);
+.theme-toggle:hover {
+  color: var(--text);
+}
+
+.nav-links .icon-sun { display: none; }
+.nav-links .icon-moon { display: block; }
+
+html.dark .nav-links .icon-sun { display: block; }
+html.dark .nav-links .icon-moon { display: none; }
+
+/* ── Hero ── */
+
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  max-width: var(--max-width);
   margin: 0 auto;
-  padding: 5rem 2rem 4rem;
+  padding: 5rem 3rem 4rem;
+}
+
+.hero-photo {
+  flex: 0 0 420px;
+}
+
+.hero-photo img {
+  width: 100%;
+  display: block;
+  border-radius: 4px;
+}
+
+.hero-text {
+  flex: 1;
 }
 
 .about-name {
-  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 300;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -81,24 +129,23 @@ a {
 
 .about-tagline {
   color: var(--muted);
-  font-size: 1.05rem;
-  margin-top: 1rem;
-  font-weight: 300;
-}
-
-.about-content {
-  margin-top: 2.5rem;
   font-size: 1.1rem;
-  line-height: 1.85;
-  color: var(--text);
+  margin-top: 1.5rem;
+  font-weight: 300;
+  line-height: 1.75;
 }
 
-.about-content p {
-  margin-bottom: 1.25rem;
-}
+@media (max-width: 800px) {
+  .hero {
+    flex-direction: column;
+    padding: 3rem 1.5rem;
+    gap: 2rem;
+  }
 
-.about-content a {
-  text-underline-offset: 3px;
+  .hero-photo {
+    flex: none;
+    width: 100%;
+  }
 }
 
 /* ── Photo grid ── */
@@ -302,6 +349,45 @@ a {
 .post-content pre code {
   background: none;
   padding: 0;
+}
+
+/* ── Map ── */
+
+.map-page {
+  padding-bottom: 4rem;
+}
+
+.map-wrap {
+  position: relative;
+  max-width: var(--max-width);
+  margin: 2rem auto 0;
+  padding: 0 2rem;
+}
+
+.map-container svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.map-tooltip {
+  position: absolute;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.78rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 4px;
+  pointer-events: none;
+  display: none;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.map-percent {
+  color: var(--muted);
+  font-size: 1.05rem;
+  font-weight: 300;
+  margin-top: 0.4rem;
 }
 
 /* ── Footer ── */

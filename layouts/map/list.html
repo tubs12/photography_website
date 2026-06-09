@@ -1,0 +1,144 @@
+{{ define "main" }}
+<section class="map-page">
+  <div class="page-header">
+    <h1 id="map-heading"></h1>
+    <p class="map-percent" id="map-percent"></p>
+  </div>
+  <div class="map-wrap">
+    <div class="map-container" id="map"></div>
+    <div class="map-tooltip" id="map-tooltip"></div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<script>
+const visitedAlpha2 = {{ with .Params.visited }}{{ . | jsonify | safeJS }}{{ else }}[]{{ end }};
+
+const alpha2ToNumeric = {
+  "AF":"4","AL":"8","DZ":"12","AD":"20","AO":"24","AG":"28","AR":"32","AM":"51",
+  "AU":"36","AT":"40","AZ":"31","BS":"44","BH":"48","BD":"50","BB":"52","BY":"112",
+  "BE":"56","BZ":"84","BJ":"204","BT":"64","BO":"68","BA":"70","BW":"72","BR":"76",
+  "BN":"96","BG":"100","BF":"854","BI":"108","CV":"132","KH":"116","CM":"120",
+  "CA":"124","CF":"140","TD":"148","CL":"152","CN":"156","CO":"170","KM":"174",
+  "CG":"178","CD":"180","CR":"188","HR":"191","CU":"192","CY":"196","CZ":"203",
+  "CI":"384","DK":"208","DJ":"262","DM":"212","DO":"214","EC":"218","EG":"818",
+  "SV":"222","GQ":"226","ER":"232","EE":"233","SZ":"748","ET":"231","FJ":"242",
+  "FI":"246","FR":"250","GA":"266","GM":"270","GE":"268","DE":"276","GH":"288",
+  "GR":"300","GL":"304","GD":"308","GT":"320","GN":"324","GW":"624","GY":"328",
+  "HT":"332","HN":"340","HU":"348","IS":"352","IN":"356","ID":"360","IR":"364",
+  "IQ":"368","IE":"372","IL":"376","IT":"380","JM":"388","JP":"392","JO":"400",
+  "KZ":"398","KE":"404","KI":"296","KP":"408","KR":"410","KW":"414","KG":"417",
+  "LA":"418","LV":"428","LB":"422","LS":"426","LR":"430","LY":"434","LI":"438",
+  "LT":"440","LU":"442","MG":"450","MW":"454","MY":"458","MV":"462","ML":"466",
+  "MT":"470","MH":"584","MR":"478","MU":"480","MX":"484","FM":"583","MD":"498",
+  "MC":"492","MN":"496","ME":"499","MA":"504","MZ":"508","MM":"104","NA":"516",
+  "NR":"520","NP":"524","NL":"528","NZ":"554","NI":"558","NE":"562","NG":"566",
+  "MK":"807","NO":"578","OM":"512","PK":"586","PW":"585","PA":"591","PG":"598",
+  "PY":"600","PE":"604","PH":"608","PL":"616","PT":"620","QA":"634","RO":"642",
+  "RU":"643","RW":"646","KN":"659","LC":"662","VC":"670","WS":"882","SM":"674",
+  "ST":"678","SA":"682","SN":"686","RS":"688","SC":"690","SL":"694","SG":"702",
+  "SK":"703","SI":"705","SB":"90","SO":"706","ZA":"710","SS":"728","ES":"724",
+  "LK":"144","SD":"729","SR":"740","SE":"752","CH":"756","SY":"760","TW":"158",
+  "TJ":"762","TZ":"834","TH":"764","TL":"626","TG":"768","TO":"776","TT":"780",
+  "TN":"788","TR":"792","TM":"795","TV":"798","UG":"800","UA":"804","AE":"784",
+  "GB":"826","US":"840","UY":"858","UZ":"860","VU":"548","VE":"862","VN":"704",
+  "YE":"887","ZM":"894","ZW":"716"
+};
+
+const countryNames = {
+  "4":"Afghanistan","8":"Albania","12":"Algeria","20":"Andorra","24":"Angola",
+  "28":"Antigua and Barbuda","32":"Argentina","51":"Armenia","36":"Australia",
+  "40":"Austria","31":"Azerbaijan","44":"Bahamas","48":"Bahrain","50":"Bangladesh",
+  "52":"Barbados","112":"Belarus","56":"Belgium","84":"Belize","204":"Benin",
+  "64":"Bhutan","68":"Bolivia","70":"Bosnia and Herzegovina","72":"Botswana",
+  "76":"Brazil","96":"Brunei","100":"Bulgaria","854":"Burkina Faso","108":"Burundi",
+  "132":"Cabo Verde","116":"Cambodia","120":"Cameroon","124":"Canada",
+  "140":"Central African Republic","148":"Chad","152":"Chile","156":"China",
+  "170":"Colombia","174":"Comoros","178":"Republic of the Congo",
+  "180":"DR Congo","188":"Costa Rica","384":"Côte d'Ivoire","191":"Croatia",
+  "192":"Cuba","196":"Cyprus","203":"Czech Republic","208":"Denmark",
+  "262":"Djibouti","212":"Dominica","214":"Dominican Republic","218":"Ecuador",
+  "818":"Egypt","222":"El Salvador","226":"Equatorial Guinea","232":"Eritrea",
+  "233":"Estonia","748":"Eswatini","231":"Ethiopia","242":"Fiji","246":"Finland",
+  "250":"France","266":"Gabon","270":"Gambia","268":"Georgia","276":"Germany",
+  "288":"Ghana","304":"Greenland","308":"Grenada","320":"Guatemala","324":"Guinea",
+  "624":"Guinea-Bissau","328":"Guyana","332":"Haiti","340":"Honduras",
+  "348":"Hungary","352":"Iceland","356":"India","360":"Indonesia","364":"Iran",
+  "368":"Iraq","372":"Ireland","376":"Israel","380":"Italy","388":"Jamaica",
+  "392":"Japan","400":"Jordan","398":"Kazakhstan","404":"Kenya","296":"Kiribati",
+  "408":"North Korea","410":"South Korea","414":"Kuwait","417":"Kyrgyzstan",
+  "418":"Laos","428":"Latvia","422":"Lebanon","426":"Lesotho","430":"Liberia",
+  "434":"Libya","438":"Liechtenstein","440":"Lithuania","442":"Luxembourg",
+  "450":"Madagascar","454":"Malawi","458":"Malaysia","462":"Maldives","466":"Mali",
+  "470":"Malta","584":"Marshall Islands","478":"Mauritania","480":"Mauritius",
+  "484":"Mexico","583":"Micronesia","498":"Moldova","492":"Monaco",
+  "496":"Mongolia","499":"Montenegro","504":"Morocco","508":"Mozambique",
+  "104":"Myanmar","516":"Namibia","520":"Nauru","524":"Nepal","528":"Netherlands",
+  "554":"New Zealand","558":"Nicaragua","562":"Niger","566":"Nigeria",
+  "807":"North Macedonia","578":"Norway","512":"Oman","586":"Pakistan",
+  "585":"Palau","591":"Panama","598":"Papua New Guinea","600":"Paraguay",
+  "604":"Peru","608":"Philippines","616":"Poland","620":"Portugal","634":"Qatar",
+  "642":"Romania","643":"Russia","646":"Rwanda","659":"Saint Kitts and Nevis",
+  "662":"Saint Lucia","670":"Saint Vincent and the Grenadines","882":"Samoa",
+  "674":"San Marino","678":"São Tomé and Príncipe","682":"Saudi Arabia",
+  "686":"Senegal","688":"Serbia","690":"Seychelles","694":"Sierra Leone",
+  "702":"Singapore","703":"Slovakia","705":"Slovenia","90":"Solomon Islands",
+  "706":"Somalia","710":"South Africa","728":"South Sudan","724":"Spain",
+  "144":"Sri Lanka","729":"Sudan","740":"Suriname","752":"Sweden",
+  "756":"Switzerland","760":"Syria","158":"Taiwan","762":"Tajikistan",
+  "834":"Tanzania","764":"Thailand","626":"Timor-Leste","768":"Togo",
+  "776":"Tonga","780":"Trinidad and Tobago","788":"Tunisia","792":"Turkey",
+  "795":"Turkmenistan","798":"Tuvalu","800":"Uganda","804":"Ukraine",
+  "784":"United Arab Emirates","826":"United Kingdom","840":"United States",
+  "858":"Uruguay","860":"Uzbekistan","548":"Vanuatu","862":"Venezuela",
+  "704":"Vietnam","887":"Yemen","894":"Zambia","716":"Zimbabwe"
+};
+
+const visitedIds = new Set(
+  visitedAlpha2.map(c => alpha2ToNumeric[c]).filter(Boolean).map(id => id.padStart(3, "0"))
+);
+
+const total = 195;
+const count = visitedIds.size;
+const pct = ((count / total) * 100).toFixed(1);
+document.getElementById("map-heading").textContent = `${count} / ${total} countries`;
+document.getElementById("map-percent").textContent = `${pct}% of the world seen`;
+
+const W = 960, H = 500;
+const svg = d3.select("#map")
+  .append("svg")
+  .attr("viewBox", `0 0 ${W} ${H}`)
+  .attr("preserveAspectRatio", "xMidYMid meet");
+
+const projection = d3.geoNaturalEarth1()
+  .scale(153)
+  .translate([W / 2, H / 2]);
+
+const path = d3.geoPath().projection(projection);
+const tooltip = document.getElementById("map-tooltip");
+const mapEl = document.getElementById("map");
+
+d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(world => {
+  svg.selectAll("path")
+    .data(topojson.feature(world, world.objects.countries).features)
+    .join("path")
+    .attr("d", path)
+    .attr("fill", d => visitedIds.has(d.id) ? "var(--map-visited)" : "var(--map-unvisited)")
+    .attr("stroke", "#fff")
+    .attr("stroke-width", 0.5)
+    .on("mousemove", function(event, d) {
+      const name = countryNames[String(+d.id)];
+      if (!name) return;
+      const rect = mapEl.getBoundingClientRect();
+      tooltip.textContent = name;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + "px";
+      tooltip.style.top = (event.clientY - rect.top - 32) + "px";
+    })
+    .on("mouseleave", () => {
+      tooltip.style.display = "none";
+    });
+});
+</script>
+{{ end }}
