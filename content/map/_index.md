@@ -2,6 +2,7 @@
 title: Map
 visited:
   - US
+  - CA
   - MX
   - GT
   - AR
